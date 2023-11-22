@@ -1,5 +1,8 @@
 <?php
 
+// Start collect output buffer
+ob_start();
+
 // Start session;
 session_start();
 
@@ -8,10 +11,6 @@ require_once("../autoload.php");
 
 // Autoload helpers
 require_once("../helpers.php");
-
-// Start collect output buffer
-ob_start();
-
 
 // Get controller
 $raw_controller_name = isset($_GET["c"]) ? $_GET["c"] : null;
@@ -30,29 +29,27 @@ try {
         $controller = new $controller_name();
         $controller->$action_name();
     } else {
-        // Clear output buffer 
+        // Handle not found error for static files (404)
         ob_end_clean();
         http_response_code(404);
     }
 } catch (\Throwable $th) {
-    // Clear output buffer 
-    ob_end_clean();
-
     // Show error page
+    ob_end_clean();
     if ($th->getMessage() === 'Class "' . $controller_name . '" not found') {
         http_response_code(404);
         echo "404 Not Found";
     } elseif ($th->getMessage() === "Call to undefined method $controller_name::$action_name()") {
         http_response_code(404);
         echo "404 Not Found";
-    } elseif ($th->getMessage() === "Throttle exception") {
+    } elseif ($th->getMessage() === "Throttle Exception") {
         http_response_code(429);
-        echo "Throttle";
+        echo "Throttle Exception";
     } elseif ($th->getMessage() === "CSRF Exception") {
         http_response_code(403);
         echo "CSRF Exception";
     } else {
         http_response_code(500);
-        echo $th->getMessage();
+        echo ENV === PROD_ENV ? "Server Internal Error" : $th->getMessage();
     }
 }

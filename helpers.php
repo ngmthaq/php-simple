@@ -8,7 +8,7 @@ function importPartial(string $_name_)
 
 function printData(mixed $data)
 {
-    echo "<pre>";
+    echo "<pre data-debug='true'>";
     print_r($data);
     echo "</pre>";
 }
@@ -17,11 +17,11 @@ function assets(string $path)
 {
     $path = str_starts_with($path, "/") ? substr($path, 1) : $path;
     echo ENV === PROD_ENV
-        ? HANDLED_APP_URL . $path . "?_v=" . APP_VERSION
-        : HANDLED_APP_URL . $path . "?_t=" . time();
+        ? APP_HANDLED_URL . $path . "?_v=" . APP_VERSION
+        : APP_HANDLED_URL . $path . "?_t=" . time();
 }
 
-function generateRandomString($length = 16)
+function generateRandomString(int $length = 16)
 {
     $characters = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
     $charactersLength = strlen($characters);
@@ -49,4 +49,39 @@ function generateXsrfInputTag()
     $key = XSRF_TOKEN_KEY;
     $token = getXsrfToken();
     echo "<input name='$key' value='$token' type='hidden' >";
+}
+
+function reload()
+{
+    header("Refresh:0");
+}
+
+function route(string $controller, string $action, array $params = [])
+{
+    $app = APP_HANDLED_URL;
+    $query = http_build_query(
+        array_merge(
+            $params,
+            [
+                "a" => $action,
+                "c" => $controller,
+            ]
+        )
+    );
+    echo "$app?$query";
+}
+
+function redirect(string $controller, string $action, array $params = [])
+{
+    $app = APP_HANDLED_URL;
+    $query = http_build_query(
+        array_merge(
+            $params,
+            [
+                "a" => $action,
+                "c" => $controller,
+            ]
+        )
+    );
+    header("Location: $app?$query");
 }

@@ -15,14 +15,16 @@ abstract class Controller
         require_once(VIEW_DIR . "/pages" . $_path_);
         $_html_ = ob_get_contents();
         ob_end_clean();
-        echo ENV === PROD_ENV ? $this->sanitizeOutput($_html_) : $_html_;
+        echo $this->sanitizeOutput($_html_);
     }
 
     private function sanitizeOutput(string $buffer)
     {
-        $search = ['/\>[^\S ]+/s', '/[^\S ]+\</s', '/(\s)+/s', '/<!--(.|\s)*?-->/'];
-        $replace = ['>', '<', '\\1', ''];
-        $buffer = preg_replace($search, $replace, $buffer);
+        if (ENV === PROD_ENV) {
+            $search = ['/\>[^\S ]+/s', '/[^\S ]+\</s', '/(\s)+/s', '/<!--(.|\s)*?-->/', '/<pre data-debug=\'true\'>(.|\s)*?<\/pre>/'];
+            $replace = ['>', '<', '\\1', '', ''];
+            $buffer = preg_replace($search, $replace, $buffer);
+        }
         return $buffer;
     }
 
@@ -45,8 +47,8 @@ abstract class Controller
                 } else {
                     $_SESSION[THROTTLE_REQUEST_KEY]["number"] += 1;
                 }
-                if ($_SESSION[THROTTLE_REQUEST_KEY]["number"] > MAX_REQUEST_PER_MINUTE) {
-                    throw new Exception("Throttle exception");
+                if ($_SESSION[THROTTLE_REQUEST_KEY]["number"] > APP_MAX_REQUEST_PER_MINUTE) {
+                    throw new Exception("Throttle Exception");
                 }
             }
         }
