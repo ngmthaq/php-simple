@@ -4,6 +4,6 @@ class HomeController extends Controller
 {
     public function index()
     {
-        return $this->showView("home", ["name" => "Thang"]);
+        return $this->response->view("home");
     }
 }

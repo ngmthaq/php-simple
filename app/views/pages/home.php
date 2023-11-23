@@ -10,9 +10,7 @@
 
 <body>
     <div id="app">
-        <form action="<?php route("home", "index", ["name" => "thang"]) ?>" method="post">
-            <h1>Xin chào <?php echo $name ?></h1>
-            <i class="bi bi-app-indicator"></i>
+        <form action="<?php route("home", "index") ?>" method="post">
             <button type="submit">Submit</button>
         </form>
     </div>

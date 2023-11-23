@@ -2,30 +2,15 @@
 
 abstract class Controller
 {
+    protected Request $request;
+    protected Response $response;
+
     public function __construct()
     {
         $this->throttleRequest();
         $this->verifyXsrf();
-    }
-
-    protected function showView(string $_name_, array $_data_ = [])
-    {
-        extract($_data_);
-        $_path_ = "/" . str_replace(".", "/", $_name_) . ".php";
-        require_once(VIEW_DIR . "/pages" . $_path_);
-        $_html_ = ob_get_contents();
-        ob_end_clean();
-        echo $this->sanitizeOutput($_html_);
-    }
-
-    private function sanitizeOutput(string $buffer)
-    {
-        if (ENV === PROD_ENV) {
-            $search = ['/\>[^\S ]+/s', '/[^\S ]+\</s', '/(\s)+/s', '/<!--(.|\s)*?-->/', '/<pre data-debug=\'true\'>(.|\s)*?<\/pre>/'];
-            $replace = ['>', '<', '\\1', '', ''];
-            $buffer = preg_replace($search, $replace, $buffer);
-        }
-        return $buffer;
+        $this->request = new Request();
+        $this->response = new Response();
     }
 
     private function throttleRequest()

@@ -1,5 +1,10 @@
 <?php
 
+/**
+ * Autoload all dependencies and configurations into application
+ * NOTICE: Do not change the position of lines of code
+ */
+
 // ENV
 define("DEV_ENV", "development");
 define("PROD_ENV", "production");
@@ -21,6 +26,7 @@ define("MODEL_DIR", ROOT_DIR . "/app/models");
 define("REPOSITORY_DIR", ROOT_DIR . "/app/repositories");
 define("VIEW_DIR", ROOT_DIR . "/app/views");
 define("CORE_DIR", ROOT_DIR . "/core");
+define("STORAGE_DIR", ROOT_DIR . "/storage");
 define("VENDOR_DIR", ROOT_DIR . "/vendor");
 
 // KEYS
@@ -30,6 +36,8 @@ define("XSRF_TOKEN_KEY", "XSRF_TOKEN_KEY");
 // VENDORS
 
 // CORE
+require_once(CORE_DIR . "/request.php");
+require_once(CORE_DIR . "/response.php");
 require_once(CORE_DIR . "/controller.php");
 
 // MODELS
