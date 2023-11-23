@@ -8,7 +8,7 @@
 // ENV
 define("DEV_ENV", "development");
 define("PROD_ENV", "production");
-define("ENV", PROD_ENV);
+define("ENV", DEV_ENV);
 
 // PHP CONFIG
 error_reporting(ENV === PROD_ENV ? 0 : E_ALL);
@@ -38,11 +38,15 @@ define("XSRF_TOKEN_KEY", "XSRF_TOKEN_KEY");
 // CORE
 require_once(CORE_DIR . "/request.php");
 require_once(CORE_DIR . "/response.php");
+require_once(CORE_DIR . "/model.php");
+require_once(CORE_DIR . "/repository.php");
 require_once(CORE_DIR . "/controller.php");
 
 // MODELS
+require_once(MODEL_DIR . "/user.model.php");
 
 // REPOSITORIES
+require_once(REPOSITORY_DIR . "/user.repo.php");
 
 // CONTROLLERS
 require_once(CONTROLLER_DIR . "/home.controller.php");

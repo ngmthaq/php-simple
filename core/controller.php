@@ -13,7 +13,7 @@ abstract class Controller
         $this->response = new Response();
     }
 
-    private function throttleRequest()
+    private function throttleRequest(): void
     {
         if (ENV === PROD_ENV) {
             if (empty($_SESSION[THROTTLE_REQUEST_KEY])) {
@@ -39,7 +39,7 @@ abstract class Controller
         }
     }
 
-    private function verifyXsrf()
+    private function verifyXsrf(): void
     {
         if (empty($_SESSION[XSRF_TOKEN_KEY])) {
             $_SESSION[XSRF_TOKEN_KEY] = generateRandomString(32);

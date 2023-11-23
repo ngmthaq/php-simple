@@ -15,7 +15,7 @@ final class Request
         $this->files =  $_FILES;
     }
 
-    private function prepareInput(array $input = [])
+    private function prepareInput(array $input = []): array
     {
         $output = [];
         foreach ($input as $key => $value) {

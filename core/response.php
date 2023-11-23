@@ -9,7 +9,7 @@ final class Response
         $this->request = new Request();
     }
 
-    final public function file(string $attachment_location)
+    final public function file(string $attachment_location): void
     {
         if (file_exists($attachment_location)) {
             ob_end_clean();
@@ -27,7 +27,7 @@ final class Response
         }
     }
 
-    final public function json(array $data = [], int $status = 200)
+    final public function json(array $data = [], int $status = 200): void
     {
         ob_end_clean();
         http_response_code($status);
@@ -35,7 +35,7 @@ final class Response
         echo json_encode($data);
     }
 
-    final public function view(string $_name_, array $_data_ = [], int $_status_ = 200)
+    final public function view(string $_name_, array $_data_ = [], int $_status_ = 200): void
     {
         $_QUERIES = $this->request->queries;
         $_data_[] = $_QUERIES;
@@ -48,7 +48,7 @@ final class Response
         echo $this->sanitizeOutput($_html_);
     }
 
-    private function sanitizeOutput(string $buffer)
+    private function sanitizeOutput(string $buffer): string
     {
         if (ENV === PROD_ENV) {
             $search = ['/\>[^\S ]+/s', '/[^\S ]+\</s', '/(\s)+/s', '/<!--(.|\s)*?-->/', '/<pre data-debug=\'true\'>(.|\s)*?<\/pre>/'];

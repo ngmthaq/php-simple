@@ -1,19 +1,19 @@
 <?php
 
-function importPartial(string $_name_)
+function importPartial(string $_name_): void
 {
     $_partial_ = "/" . str_replace(".", "/", $_name_) . ".php";
     include(VIEW_DIR . "/partials" . $_partial_);
 }
 
-function printData(mixed $data)
+function printData(mixed $data): void
 {
     echo "<pre data-debug='true'>";
     print_r($data);
     echo "</pre>";
 }
 
-function assets(string $path)
+function assets(string $path): void
 {
     $path = str_starts_with($path, "/") ? substr($path, 1) : $path;
     echo ENV === PROD_ENV
@@ -21,7 +21,7 @@ function assets(string $path)
         : APP_HANDLED_URL . $path . "?_t=" . time();
 }
 
-function generateRandomString(int $length = 16)
+function generateRandomString(int $length = 16): string
 {
     $characters = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
     $charactersLength = strlen($characters);
@@ -32,31 +32,31 @@ function generateRandomString(int $length = 16)
     return $randomString;
 }
 
-function getXsrfToken()
+function getXsrfToken(): string
 {
     return isset($_SESSION[XSRF_TOKEN_KEY]) ? $_SESSION[XSRF_TOKEN_KEY] : "";
 }
 
-function generateXsrfMetaTag()
+function generateXsrfMetaTag(): void
 {
     $key = XSRF_TOKEN_KEY;
     $token = getXsrfToken();
     echo "<meta name='$key' content='$token' >";
 }
 
-function generateXsrfInputTag()
+function generateXsrfInputTag(): void
 {
     $key = XSRF_TOKEN_KEY;
     $token = getXsrfToken();
     echo "<input name='$key' value='$token' type='hidden' >";
 }
 
-function reload()
+function reload(): void
 {
     header("Refresh:0");
 }
 
-function route(string $controller, string $action, array $params = [])
+function route(string $controller, string $action, array $params = []): void
 {
     $app = APP_HANDLED_URL;
     $query = http_build_query(
@@ -71,7 +71,7 @@ function route(string $controller, string $action, array $params = [])
     echo "$app?$query";
 }
 
-function redirect(string $controller, string $action, array $params = [])
+function redirect(string $controller, string $action, array $params = []): void
 {
     $app = APP_HANDLED_URL;
     $query = http_build_query(
