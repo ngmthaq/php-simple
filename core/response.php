@@ -48,11 +48,23 @@ final class Response
         echo $this->sanitizeOutput($_html_);
     }
 
+    final public function error(int $code, string $message, string $title): void
+    {
+        ob_end_clean();
+        ob_start();
+        extract(compact("message", "code", "title"));
+        require_once(CORE_DIR . "/error-view.php");
+        $_html_ = ob_get_contents();
+        ob_end_clean();
+        http_response_code($code);
+        echo $this->sanitizeOutput($_html_);
+    }
+
     private function sanitizeOutput(string $buffer): string
     {
         if (ENV === PROD_ENV) {
-            $search = ['/\>[^\S ]+/s', '/[^\S ]+\</s', '/(\s)+/s', '/<!--(.|\s)*?-->/', '/<pre data-debug=\'true\'>(.|\s)*?<\/pre>/'];
-            $replace = ['>', '<', '\\1', '', ''];
+            $search = ["/\>[^\S ]+/s", "/[^\S ]+\</s", "/(\s)+/s", "/<!--(.|\s)*?-->/", "/<pre data-debug=\"true\">(.|\s)*?<\/pre>/"];
+            $replace = [">", "<", "\\1", "", ""];
             $buffer = preg_replace($search, $replace, $buffer);
         }
         return $buffer;

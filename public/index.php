@@ -35,21 +35,16 @@ try {
     }
 } catch (\Throwable $th) {
     // Show error page
-    ob_end_clean();
+    $response = new Response();
     if ($th->getMessage() === 'Class "' . $controller_name . '" not found') {
-        http_response_code(404);
-        echo "404 Not Found";
+        $response->error(404, "Sorry ! We cannot found the page you are looking for !", "Not Found");
     } elseif ($th->getMessage() === "Call to undefined method $controller_name::$action_name()") {
-        http_response_code(404);
-        echo "404 Not Found";
+        $response->error(404, "Sorry ! We cannot found the page you are looking for !", "Not Found");
     } elseif ($th->getMessage() === "Throttle Exception") {
-        http_response_code(429);
-        echo "Throttle Exception";
+        $response->error(429, "You have sent too many requests in a short period of time. Please try again in a few minutes !", "Too many requests");
     } elseif ($th->getMessage() === "CSRF Exception") {
-        http_response_code(403);
-        echo "CSRF Exception";
+        $response->error(403, ENV === PROD_ENV ? "You do not have permission to access this site !" : "CSRF Token Mismatch", "Forbidden");
     } else {
-        http_response_code(500);
-        echo ENV === PROD_ENV ? "Server Internal Error" : $th->getMessage();
+        $response->error(500, ENV === PROD_ENV ? "Oops ! Server Internal Error !" : $th->getMessage(), "Server Internal Error");
     }
 }
