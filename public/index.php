@@ -37,14 +37,16 @@ try {
     // Show error page
     $response = new Response();
     if ($th->getMessage() === 'Class "' . $controller_name . '" not found') {
-        $response->error(404, "Sorry ! We cannot found the page you are looking for !", "Not Found");
+        $response->error(404, "Sorry, we cannot found the page you are looking for", "Not Found");
     } elseif ($th->getMessage() === "Call to undefined method $controller_name::$action_name()") {
-        $response->error(404, "Sorry ! We cannot found the page you are looking for !", "Not Found");
+        $response->error(404, "Sorry, we cannot found the page you are looking for", "Not Found");
     } elseif ($th->getMessage() === "Throttle Exception") {
-        $response->error(429, "You have sent too many requests in a short period of time. Please try again in a few minutes !", "Too many requests");
+        $response->error(429, "You have sent too many requests in a short period of time, please try again in a few minutes", "Too many requests");
     } elseif ($th->getMessage() === "CSRF Exception") {
-        $response->error(403, ENV === PROD_ENV ? "You do not have permission to access this site !" : "CSRF Token Mismatch", "Forbidden");
+        $response->error(403, ENV === PROD_ENV ? "You do not have permission to access this site" : "CSRF Token Mismatch", "Forbidden");
     } else {
-        $response->error(500, ENV === PROD_ENV ? "Oops ! Server Internal Error !" : $th->getMessage(), "Server Internal Error");
+        $error = $th->getMessage() . " (" . $th->getFile() . ":" . $th->getLine() . ")";
+        systemLogError($error);
+        $response->error(500, ENV === PROD_ENV ? "Something went wrong, please try again later" : $error, "Server Internal Error");
     }
 }

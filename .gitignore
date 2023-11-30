@@ -1,2 +1,5 @@
 /storage/**/*
-!/storage/.gitkeep
+!/storage/logs
+!/storage/logs/.gitkeep
+!/storage/app
+!/storage/app/.gitkeep

@@ -8,7 +8,7 @@
 // ENV
 define("DEV_ENV", "development");
 define("PROD_ENV", "production");
-define("ENV", PROD_ENV);
+define("ENV", DEV_ENV);
 
 // PHP CONFIG
 error_reporting(ENV === PROD_ENV ? 0 : E_ALL);

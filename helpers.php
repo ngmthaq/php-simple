@@ -85,3 +85,34 @@ function redirect(string $controller, string $action, array $params = []): void
     );
     header("Location: $app?$query");
 }
+
+function systemLog(string $message, string $type = "INFO")
+{
+    $date = gmdate("Y-m-d");
+    $datetime = gmdate("Y-m-d H:i:s");
+    $msg = "[$datetime UTC] $type: $message \n";
+    $log_dir = STORAGE_DIR . "/logs";
+    $log_file = "system-log-$date-utc.log";
+    $dir = $log_dir . "/" . $log_file;
+    file_put_contents($dir, $msg, FILE_APPEND);
+    $log_file_names = scandir($log_dir);
+    foreach ($log_file_names as $index => $log_file_name) {
+        if ($index > 1 && $log_file_name !== $log_file) {
+            unlink($log_dir . "/" . $log_file_name);
+        }
+    }
+}
+
+
+function systemLogInfo(string $message)
+{
+    $type = "INFO";
+    systemLog($message, $type);
+}
+
+
+function systemLogError(string $message)
+{
+    $type = "ERROR";
+    systemLog($message, $type);
+}
