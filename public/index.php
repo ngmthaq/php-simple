@@ -6,7 +6,10 @@ ob_start();
 // Start session;
 session_start();
 
-// Autoload
+// Autoload ENV
+require_once("../env.php");
+
+// Autoload dependencies
 require_once("../autoload.php");
 
 // Autoload helpers

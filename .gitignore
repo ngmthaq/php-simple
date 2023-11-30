@@ -3,3 +3,4 @@
 !/storage/logs/.gitkeep
 !/storage/app
 !/storage/app/.gitkeep
+/env.php
