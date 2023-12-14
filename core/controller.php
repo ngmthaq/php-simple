@@ -13,6 +13,11 @@ abstract class Controller
         $this->response = new Response();
     }
 
+    /**
+     * Limit number of request per minute
+     * 
+     * @return void
+     */
     private function throttleRequest(): void
     {
         if (ENV === PROD_ENV) {
@@ -39,6 +44,11 @@ abstract class Controller
         }
     }
 
+    /**
+     * Verify CSRF Token
+     * 
+     * @return void
+     */
     private function verifyXsrf(): void
     {
         if (empty($_SESSION[XSRF_TOKEN_KEY])) {

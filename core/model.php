@@ -9,5 +9,10 @@ abstract class Model
         $this->table = $this->setTableName();
     }
 
+    /**
+     * Set database table name
+     * 
+     * @return string
+     */
     abstract protected function setTableName(): string;
 }

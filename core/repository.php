@@ -9,5 +9,10 @@ abstract class Repository
         $this->model = $this->setModel();
     }
 
+    /**
+     * Set related model
+     * 
+     * @return Model
+     */
     abstract protected function setModel(): Model;
 }

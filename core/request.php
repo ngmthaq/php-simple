@@ -2,9 +2,24 @@
 
 final class Request
 {
+    /**
+     * $_GET array prepared
+     */
     public array $queries;
+
+    /**
+     * $_POST array prepared
+     */
     public array $inputs;
+
+    /**
+     * $_COOKIE array prepared
+     */
     public array $cookies;
+
+    /**
+     * $_FILES array prepared
+     */
     public array $files;
 
     public function __construct()
@@ -15,6 +30,12 @@ final class Request
         $this->files =  $_FILES;
     }
 
+    /**
+     * Prepare input to prevent XSS
+     * 
+     * @param array $input
+     * @return array
+     */
     private function prepareInput(array $input = []): array
     {
         $output = [];
