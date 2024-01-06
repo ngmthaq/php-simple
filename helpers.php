@@ -86,7 +86,7 @@ function redirect(string $controller, string $action, array $params = []): void
     header("Location: $app?$query");
 }
 
-function systemLog(string $message, string $type = "INFO")
+function systemLog(string $message, string $type = "INFO"): void
 {
     $date = gmdate("Y-m-d");
     $datetime = gmdate("Y-m-d H:i:s");
@@ -104,15 +104,67 @@ function systemLog(string $message, string $type = "INFO")
 }
 
 
-function systemLogInfo(string $message)
+function systemLogInfo(string $message): void
 {
     $type = "INFO";
     systemLog($message, $type);
 }
 
 
-function systemLogError(string $message)
+function systemLogError(string $message): void
 {
     $type = "ERROR";
     systemLog($message, $type);
+}
+
+function getIPAddress(): string
+{
+    if (isset($_SERVER['HTTP_CLIENT_IP'])) {
+        $ip = $_SERVER['HTTP_CLIENT_IP'];
+    } elseif (isset($_SERVER['HTTP_X_FORWARDED_FOR'])) {
+        $ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
+    } elseif (isset($_SERVER['REMOTE_ADDR'])) {
+        $ip = $_SERVER['REMOTE_ADDR'];
+    } else {
+        $ip = "";
+    }
+    return $ip;
+}
+
+function convertStringToSlug(string $string, string $symbol = '-'): string
+{
+    if (empty($string)) return $string;
+    $character_a = array('à', 'á', 'ạ', 'ả', 'ã', 'â', 'ầ', 'ấ', 'ậ', 'ẩ', 'ẫ', 'ă', 'ằ', 'ắ', 'ặ', 'ẳ', 'ẵ');
+    $character_e = array('è', 'é', 'ẹ', 'ẻ', 'ẽ', 'ê', 'ề', 'ế', 'ệ', 'ể', 'ễ');
+    $character_i = array('ì', 'í', 'ị', 'ỉ', 'ĩ');
+    $character_o = array('ò', 'ó', 'ọ', 'ỏ', 'õ', 'ô', 'ồ', 'ố', 'ộ', 'ổ', 'ỗ', 'ơ', 'ờ', 'ớ', 'ợ', 'ở', 'ỡ');
+    $character_u = array('ù', 'ú', 'ụ', 'ủ', 'ũ', 'ư', 'ừ', 'ứ', 'ự', 'ử', 'ữ');
+    $character_y = array('ỳ', 'ý', 'ỵ', 'ỷ', 'ỹ');
+    $character_d = array('đ');
+    $character_symbol = array('!', '@', '%', '^', '*', '(', ')', '+', '=', '<', '>', '?', '/', ', ', '.', ':', ';', '|', '"', '&', '#', '[', ']', '~', '$', '_', '__', '--', ' ');
+    $alias = mb_strtolower($string, 'UTF-8');
+    $alias = trim($alias);
+    $alias = str_replace($character_a, 'a', $alias);
+    $alias = str_replace($character_e, 'e', $alias);
+    $alias = str_replace($character_i, 'i', $alias);
+    $alias = str_replace($character_o, 'o', $alias);
+    $alias = str_replace($character_u, 'u', $alias);
+    $alias = str_replace($character_y, 'y', $alias);
+    $alias = str_replace($character_d, 'd', $alias);
+    $symbol_modify = '-';
+    if (isset($symbol)) $symbol_modify = $symbol;
+    $alias = str_replace($character_symbol, $symbol_modify, $alias);
+    $alias = preg_replace('/--+/', $symbol_modify, $alias);
+    $alias = preg_replace('/__+/', $symbol_modify, $alias);
+    return $alias;
+}
+
+function jsonEncodePrettify(mixed $data): string | false
+{
+    return json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
+}
+
+function needJsonResponse(): bool
+{
+    return isset($_SERVER["HTTP_ACCEPT"]) && $_SERVER["HTTP_ACCEPT"] === "application/json";
 }

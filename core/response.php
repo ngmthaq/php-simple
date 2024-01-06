@@ -80,14 +80,19 @@ final class Response
      */
     final public function error(int $code, string $message, string $title): void
     {
-        ob_end_clean();
-        ob_start();
-        extract(compact("message", "code", "title"));
-        require_once(CORE_DIR . "/error-view.php");
-        $_html_ = ob_get_contents();
-        ob_end_clean();
-        http_response_code($code);
-        echo $this->sanitizeOutput($_html_);
+        if (needJsonResponse()) {
+            $response = ["error" => $title, "message" => $message];
+            $this->json($response, $code);
+        } else {
+            ob_end_clean();
+            ob_start();
+            extract(compact("message", "code", "title"));
+            require_once(CORE_DIR . "/error-view.php");
+            $_html_ = ob_get_contents();
+            ob_end_clean();
+            http_response_code($code);
+            echo $this->sanitizeOutput($_html_);
+        }
     }
 
     /**

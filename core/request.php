@@ -31,6 +31,14 @@ final class Request
     }
 
     /**
+     * Check if request need a json response
+     */
+    public function needJsonResponse(): bool
+    {
+        return needJsonResponse();
+    }
+
+    /**
      * Prepare input to prevent XSS
      * 
      * @param array $input
