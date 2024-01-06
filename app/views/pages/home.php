@@ -11,6 +11,7 @@
 <body>
     <div id="app">
         <form action="<?php route("home", "index") ?>" method="post">
+            <?php generateXsrfInputTag() ?>
             <button type="submit">Submit</button>
         </form>
     </div>

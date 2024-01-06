@@ -4,3 +4,4 @@
 !/storage/app
 !/storage/app/.gitkeep
 /env.php
+/tools/node/node_modules

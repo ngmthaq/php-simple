@@ -119,10 +119,10 @@ function systemLogError(string $message): void
 
 function getIPAddress(): string
 {
-    if (isset($_SERVER['HTTP_CLIENT_IP'])) {
-        $ip = $_SERVER['HTTP_CLIENT_IP'];
-    } elseif (isset($_SERVER['HTTP_X_FORWARDED_FOR'])) {
-        $ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
+    if (isset($_SERVER['HTTP_STT_CLIENT_IP'])) {
+        $ip = $_SERVER['HTTP_STT_CLIENT_IP'];
+    } elseif (isset($_SERVER['HTTP_STT_X_FORWARDED_FOR'])) {
+        $ip = $_SERVER['HTTP_STT_X_FORWARDED_FOR'];
     } elseif (isset($_SERVER['REMOTE_ADDR'])) {
         $ip = $_SERVER['REMOTE_ADDR'];
     } else {
@@ -166,5 +166,5 @@ function jsonEncodePrettify(mixed $data): string | false
 
 function needJsonResponse(): bool
 {
-    return isset($_SERVER["HTTP_ACCEPT"]) && $_SERVER["HTTP_ACCEPT"] === "application/json";
+    return isset($_SERVER["HTTP_STT_ACCEPT"]) && $_SERVER["HTTP_STT_ACCEPT"] === "application/json";
 }
